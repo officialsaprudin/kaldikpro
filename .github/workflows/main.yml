@@ -32,11 +32,32 @@ jobs:
       - name: Prepare Web Assets & Capacitor Android
         run: |
           mkdir -p www
-          find . -maxdepth 2 -name "index.html" -exec cp {} www/ \;
-          find . -maxdepth 2 -name "manifest.json" -exec cp {} www/ \;
-          find . -maxdepth 2 -name "sw.js" -exec cp {} www/ \;
-          find . -maxdepth 2 -name "package.json" -exec cp {} . \; || true
-          find . -maxdepth 2 -name "capacitor.config.json" -exec cp {} . \; || true
+          find . -maxdepth 3 -name "index.html" -not -path "./www/*" -exec cp {} www/index.html \;
+          find . -maxdepth 3 -name "manifest.json" -not -path "./www/*" -exec cp {} www/manifest.json \; || true
+          find . -maxdepth 3 -name "sw.js" -not -path "./www/*" -exec cp {} www/sw.js \; || true
+          cat << 'EOF' > package.json
+          {
+            "name": "kaldikpro-android",
+            "version": "1.0.0",
+            "private": true,
+            "dependencies": {
+              "@capacitor/android": "^6.0.0",
+              "@capacitor/cli": "^6.0.0",
+              "@capacitor/core": "^6.0.0"
+            }
+          }
+          EOF
+          cat << 'EOF' > capacitor.config.json
+          {
+            "appId": "id.sch.kaldikpro.app",
+            "appName": "KaldikPro",
+            "webDir": "www",
+            "android": {
+              "backgroundColor": "#f8fafc",
+              "allowMixedContent": true
+            }
+          }
+          EOF
           npm install
           npx cap add android
           npx cap sync android

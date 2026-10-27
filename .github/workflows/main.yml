@@ -26,9 +26,6 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Prepare Web Assets & Capacitor Android
         run: |
           rm -rf www android package.json package-lock.json capacitor.config.json

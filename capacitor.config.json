@@ -1,0 +1,10 @@
+{
+  "appId": "id.sch.kaldikpro.app",
+  "appName": "KaldikPro",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "android": {
+    "backgroundColor": "#f8fafc",
+    "allowMixedContent": true
+  }
+}

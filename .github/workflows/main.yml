@@ -31,34 +31,15 @@ jobs:
 
       - name: Prepare Web Assets & Capacitor Android
         run: |
+          rm -rf www android package.json package-lock.json capacitor.config.json
           mkdir -p www
-          find . -maxdepth 3 -name "index.html" -not -path "./www/*" -exec cp {} www/index.html \;
-          find . -maxdepth 3 -name "manifest.json" -not -path "./www/*" -exec cp {} www/manifest.json \; || true
-          find . -maxdepth 3 -name "sw.js" -not -path "./www/*" -exec cp {} www/sw.js \; || true
-          cat << 'EOF' > package.json
-          {
-            "name": "kaldikpro-android",
-            "version": "1.0.0",
-            "private": true,
-            "dependencies": {
-              "@capacitor/android": "^6.0.0",
-              "@capacitor/cli": "^6.0.0",
-              "@capacitor/core": "^6.0.0"
-            }
-          }
-          EOF
-          cat << 'EOF' > capacitor.config.json
-          {
-            "appId": "id.sch.kaldikpro.app",
-            "appName": "KaldikPro",
-            "webDir": "www",
-            "android": {
-              "backgroundColor": "#f8fafc",
-              "allowMixedContent": true
-            }
-          }
-          EOF
-          npm install
+          find . -name "index.html" -not -path "./www/*" -exec cp {} www/index.html \;
+          find . -name "manifest.json" -not -path "./www/*" -exec cp {} www/manifest.json \; || true
+          find . -name "sw.js" -not -path "./www/*" -exec cp {} www/sw.js \; || true
+          test -f www/index.html || echo "<h1>index.html belum diupload</h1>" > www/index.html
+          npm init -y
+          npm install @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6
+          npx cap init "KaldikPro" "id.sch.kaldikpro.app" --web-dir www
           npx cap add android
           npx cap sync android
 
